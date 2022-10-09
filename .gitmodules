@@ -1,0 +1,12 @@
+[submodule "WaterContainment-MIDDLEWARE"]
+	path = WaterContainment-MIDDLEWARE
+	url = https://github.com/pedroermarinho/WaterContainment-MIDDLEWARE.git
+[submodule "WaterContainment-FIRMWARE"]
+	path = WaterContainment-FIRMWARE
+	url = https://github.com/pedroermarinho/WaterContainment-FIRMWARE.git
+[submodule "WaterContainment-WEB"]
+	path = WaterContainment-WEB
+	url = https://github.com/pedroermarinho/WaterContainment-WEB.git
+[submodule "WaterContainment-API"]
+	path = WaterContainment-API
+	url = https://github.com/pedroermarinho/WaterContainment-API.git
