@@ -1,0 +1,65 @@
+version: '3'
+services:
+  db:
+    container_name: db
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=watercontainment
+      - POSTGRES_PASSWORD=watercontainment123
+      - POSTGRES_DB=watercontainment
+    ports:
+      - "5432:5432"
+
+  water-containment-mosquitto:
+    container_name: water-containment-mosquitto
+    restart: always
+    build:
+      context: WaterContainment-MOSQUITTO
+      dockerfile: Dockerfile
+    expose:
+      - "1883"
+      - "9001"
+    ports:
+      - 1883:1883
+      - 9001:9001
+    environment:
+      - MOSQUITTO_USERNAME=watercontainment
+      - MOSQUITTO_PASSWORD=watercontainment123
+    volumes:
+      - ./WaterContainment-MOSQUITTO/config:/mosquitto/config
+      - ./WaterContainment-MOSQUITTO/log:/mosquitto/log
+      - ./WaterContainment-MOSQUITTO/data:/mosquitto/data
+
+  water-containment-middleware:
+    container_name: water-containment-middleware
+    restart: always
+    build:
+      context: WaterContainment-MIDDLEWARE
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - db
+      - water-containment-mosquitto
+
+  water-containment-api:
+    container_name: water-containment-api
+    restart: always
+    build:
+      context: WaterContainment-API
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+
+  water-containment-web:
+    container_name: water-containment-web
+    build:
+      context: WaterContainment-WEB
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - water-containment-api
